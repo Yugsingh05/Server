@@ -33,6 +33,32 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
       res.status(500).json({ message: "Server error" });
     }
   });
+
+
+  router.post("/login", async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { email, password } = req.body;
+
+      console.log("email", email);
+  
+      const user = await User.findOne({ email });
+  
+      if (user) {
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
+  
+        if (isPasswordValid) {
+          res.status(200).json({ success: true, message: "User logged in successfully" });
+        } else {
+          res.status(401).json({ message: "Invalid credentials" });
+        }
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
   
 
 export default router
