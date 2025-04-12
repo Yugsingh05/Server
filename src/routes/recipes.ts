@@ -40,6 +40,35 @@ router.post("/create-recipe", authMiddleware, async (req: AuthRequest, res: Resp
       res.status(500).json({ message: "Server error" });
     }
   });
+
+  router.delete("/delete-recipe/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const recipeId = req.params.id;
+      await Recipe.findByIdAndDelete(recipeId);
+      res.status(200).json({ success: true, message: "Recipe deleted successfully" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
   
+
+  router.put("/update-recipe/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const recipeId = req.params.id;
+      const { title, description, difficulty } = req.body;
+  
+      const updatedRecipe = await Recipe.findByIdAndUpdate(
+        recipeId,
+        { title, description, difficulty },
+        { new: true }
+      );
+  
+      res.status(200).json({ success: true, data: updatedRecipe });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
 
   export default  router
