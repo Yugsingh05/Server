@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import authMiddleware, { AuthRequest } from "../middleware/middleware";
 import Recipe from "../models/Recipe";
+import User from "../models/User";
 
 const router = Router();
 
@@ -65,6 +66,24 @@ router.post("/create-recipe", authMiddleware, async (req: AuthRequest, res: Resp
       );
   
       res.status(200).json({ success: true, data: updatedRecipe });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  router.get("/get-recipe/:id", authMiddleware, async (req: AuthRequest, res: Response) => {
+    try {
+      const recipeId = req.params.id;
+      const recipe = await Recipe.findById(recipeId);
+
+      const user = await User.findById(req.userId);
+
+      const data = {
+        recipe,
+        email : user?.email
+      }
+      res.status(200).json({ success: true, data: data });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Server error" });
