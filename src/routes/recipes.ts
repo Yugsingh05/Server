@@ -78,7 +78,7 @@ router.post("/create-recipe", authMiddleware, async (req: AuthRequest, res: Resp
       const recipeId = req.params.id;
       const recipe = await Recipe.findById(recipeId);
 
-      const user = await User.findById(req.userId);
+      const user = await User.findById(recipe?.createdBy);
 
       const data = {
         recipe,
