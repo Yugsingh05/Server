@@ -34,7 +34,8 @@ router.post("/create-recipe", authMiddleware, async (req: AuthRequest, res: Resp
 
   router.get("/get-recipes", authMiddleware, async (req: AuthRequest, res: Response) => {
     try {
-      const recipes = await Recipe.find({ createdBy: req.userId });
+      const recipes = await Recipe.find().sort({ createdAt: -1 });
+
       res.status(200).json({ success: true, data: recipes });
     } catch (error) {
       console.log(error);
