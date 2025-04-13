@@ -82,7 +82,7 @@ router.post("/create-recipe", authMiddleware, async (req: AuthRequest, res: Resp
 
       const data = {
         recipe,
-        email : user?.email
+        userName : user?.userName
       }
       res.status(200).json({ success: true, data: data });
     } catch (error) {

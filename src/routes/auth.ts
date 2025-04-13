@@ -8,7 +8,7 @@ const router = Router();
 router.post("/register", async (req: Request, res: Response): Promise<void> => {
   try {
     console.log("req.bofy", req.body);
-    const { email, password } = req.body;
+    const { email, password,userName } = req.body;
 
     console.log("email", password);
 
@@ -19,6 +19,7 @@ router.post("/register", async (req: Request, res: Response): Promise<void> => {
     } else {
       const NewPassword = bcrypt.hashSync(password, 10);
       const newUser = await User.create({
+        userName,
         email,
         password: NewPassword,
       });
